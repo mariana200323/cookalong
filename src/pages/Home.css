@@ -10,42 +10,75 @@
 }
 
 .home-content {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/*Top bar containing logo and search bar*/
-.top-bar {
+/* Navbar */
+.nav-bar {
   display: flex;
-  margin-top: 10px;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  gap: 0px;
-  width: fit-content;
-  flex-wrap: nowrap;
+  margin-top: 5px;
+  margin-bottom: 50px;
+  padding: 0px 0;
+  width: 100%;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
-/*Logo*/
+/* Logo */
 .logo-container {
   flex-shrink: 0;
 }
 
-.Cook-Along-logo {
-  width: 300px;
+.cook-along-logo {
+  width: 200px;
   height: auto;
-  flex-shrink: 0;
-  margin-bottom: 25px;
-  max-width: 100%;
   display: block;
 }
 
-/*SEARCH BAR*/
-.search-bar {
-  flex: 1;
+/* Nav links */
+.nav-links {
   display: flex;
   align-items: center;
-  min-width: 700px;
-  max-width: 100%;
+  gap: 28px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #2f2f2f;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.nav-links a:hover {
+  color: #dd4f1a;
+}
+
+.search-icon {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.search-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Search bar shown after clicking icon */
+.search-bar-container {
+  max-width: 800px;
+  margin: 20px auto 40px auto;
+  animation: fadeIn 0.3s ease;
+}
+
+/* SearchBar component styling */
+.search-bar {
+  display: flex;
+  align-items: center;
   border: 2px solid #6f6866;
   border-radius: 10px;
   overflow: hidden;
@@ -74,37 +107,185 @@
   background-color: #c84514;
 }
 
-/*Welcome section styling*/
+/* Welcome + image section */
 .info-section {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.welcome-section {
+  flex: 1;
 }
 
 .welcome-section h1 {
-  margin: 0 0 12px 0;
+  margin: 0 0 16px 0;
   font-size: 3rem;
-  text-align: center;
-  margin-left: 0;
-  margin-right: 0;
-  
-  width: 100%;
   color: #2f2f2f;
+  text-align: left;
+}
+
+.welcome-section p {
+  margin: 0;
+  line-height: 1.6;
+  color: #555;
+  font-size: 1.1rem;
+  text-align: left;
+}
+
+/* Featured dish image */
+.featured-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.featured-image img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Popular recipes section */
+.featured-section {
+  margin-top: 20px;
 }
 
 .featured-section h2 {
   margin: 0 0 12px 0;
-  text-align: center;
   font-size: 2.2rem;
   color: #2f2f2f;
+  text-align: left;
 }
 
-.welcome-section p,
 .featured-section p {
   margin: 0;
   line-height: 1.5;
   color: #555;
   font-size: 1.1rem;
+  text-align: left;
 }
 
+.category-section {
+  margin-top: 60px;
+}
+
+.category-heading {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #2f2f2f;
+  margin-bottom: 30px;
+}
+
+.category-heading span {
+  font-style: italic;
+  font-weight: 400;
+  color: #8d5b77;
+  letter-spacing: 0;
+  margin-left: 8px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.category-card {
+  position: relative;
+  overflow: hidden;
+  background-color: white;
+}
+
+.category-card img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+.category-label {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #e2b24e;
+  color: white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  padding: 12px 22px;
+  white-space: nowrap;
+}
+/* Small animation for search */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive layout */
+@media (max-width: 900px) {
+  .nav-bar {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .cook-along-logo {
+    width: 140px;
+  }
+
+  .info-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .welcome-section h1,
+  .welcome-section p,
+  .featured-section h2,
+  .featured-section p {
+    text-align: center;
+  }
+
+  .featured-image img {
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .category-card img {
+    height: 320px;
+  }
+}
+
+@media (max-width: 600px) {
+  .category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-heading {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
