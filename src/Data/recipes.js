@@ -27,9 +27,7 @@ const recipes = [
             "Quickly pour the egg mixture over the pasta and toss to combine. The residual heat will cook the eggs and create a creamy sauce.",
             "Season with salt and pepper to taste. Serve immediately."
         ]
-        
     },
-
     {
         id: 2,
         title: "Homemade Macaroni & Cheese",
@@ -37,20 +35,15 @@ const recipes = [
         description: "macaroni pasta combined with a rich, creamy cheese sauce—most commonly cheddar",
         time: 45,
         difficulty: "Easy",
-        ingredients: 
-        [
+        ingredients: [
             "Elbow macaroni",
             "Butter",
             "Flour",
             "Milk (or heavy cream)",
             "shredded cheese"
         ],
-        steps:["none"]
-
-
-
+        steps: ["none"]
     }
-
 ];
 
 export default recipes;

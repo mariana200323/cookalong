@@ -1,11 +1,9 @@
 /*Recipes.jsx is the page for displaying available recipes.
  It should show a list of recipes and allow users to browse and select one.
 This page should feel polished and welcoming.*/
-import Mac_and_CheeseImg from '../assets/Macaroni-And-Cheese.jpg'
-import CarbonaraImg from '../assets/Carbonara.jpg'
-import recipesData from '../Data/recipes'
 import CookAlongLogo from '../assets/CookAlong.svg'
 import { useState } from 'react'
+import recipesData from '../Data/recipes'
 import './Recipes.css'
 
 function Recipes({ searchTerm, goHome, goToRecipe }) {

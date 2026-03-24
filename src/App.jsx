@@ -4,10 +4,13 @@
 import { useState } from 'react'
 import Home from "./pages/Home"
 import Recipes from "./pages/Recipes"
+import RecipeStep from "./pages/RecipeStep"
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+
   return (
     <>  
       {currentPage === 'home' && (
@@ -21,7 +24,24 @@ function App() {
       {currentPage === 'recipes' && (
         <Recipes
           searchTerm={searchTerm}
-          goHome={() => setCurrentPage('home')}
+          goHome={() => {
+            setCurrentPage('home')
+            setSelectedRecipe(null)
+          }}
+          goToRecipe={(recipe) => {
+            setSelectedRecipe(recipe)
+            setCurrentPage('step')
+          }}
+        />
+      )}
+
+      {currentPage === 'step' && selectedRecipe && (
+        <RecipeStep
+          recipe={selectedRecipe}
+          goBack={() => {
+            setCurrentPage('recipes')
+            setSelectedRecipe(null)
+          }}
         />
       )}
     </>
