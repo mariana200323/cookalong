@@ -1,0 +1,23 @@
+
+/*Apply a global box-sizing rule to ensure consistent sizing across all elements*/
+* {
+  /*Include padding and border in the element's total width and height
+  Important since without it elements break layouts*/
+  box-sizing: border-box;
+}
+
+/*Set up the main layout for the home page*/
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+/*Set a background color and font for the entire application*/
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff8f7;
+}
