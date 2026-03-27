@@ -1,10 +1,13 @@
 // recipes.js stores the recipe data used by the app.
 // This includes title, image, ingredients, cooking time, difficulty, and steps.
+import Mac_and_CheeseImg from '../assets/Macaroni-And-Cheese.jpg'
+import CarbonaraImg from '../assets/Carbonara.jpg'
+
 const recipes = [
     {
         id: 1,
         title: "Spaghetti Carbonara",
-        image: "../assets/Carbonara.jpg",
+        image: CarbonaraImg,
         description: "A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.",
         time: 30,
         difficulty: "Medium",
@@ -24,8 +27,23 @@ const recipes = [
             "Quickly pour the egg mixture over the pasta and toss to combine. The residual heat will cook the eggs and create a creamy sauce.",
             "Season with salt and pepper to taste. Serve immediately."
         ]
+    },
+    {
+        id: 2,
+        title: "Homemade Macaroni & Cheese",
+        image: Mac_and_CheeseImg,
+        description: "macaroni pasta combined with a rich, creamy cheese sauce—most commonly cheddar",
+        time: 45,
+        difficulty: "Easy",
+        ingredients: [
+            "Elbow macaroni",
+            "Butter",
+            "Flour",
+            "Milk (or heavy cream)",
+            "shredded cheese"
+        ],
+        steps: ["none"]
     }
-
 ];
 
 export default recipes;

@@ -25,7 +25,7 @@ function Home({ searchTerm, setSearchTerm, goToRecipes }) {
                 <nav className="nav-links">
                     <a href="#">Home</a>
                     <a href="#">About</a>
-                    <a href="#">Recipes</a>
+                    <a href="#" onClick={goToRecipes}>Recipes</a>
                     <a href="#">Start Here</a>
                     <button className="search-icon" onClick={() => setShowSearch(!showSearch)} >🔍</button>
                 </nav>

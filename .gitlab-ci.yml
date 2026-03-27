@@ -1,0 +1,12 @@
+image: node:20
+
+stages:
+  - build
+
+build:
+  stage: build
+  tags:
+    - cs321-f25-mreep-zeus-3
+  script:
+    - npm install
+    - npm run build
