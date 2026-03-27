@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background-color: #f4f4f4;
+  background-color: #f7e8f5;
   padding: 40px 24px;
   font-family: Arial, sans-serif;
 }
@@ -18,14 +18,15 @@
 /* Navbar */
 .nav-bar {
   display: flex;
+  height: 200px;
   justify-content: space-between;
   align-items: center;
-  margin-top: 5px;
+  margin-top: 10px;
   margin-bottom: 50px;
-  padding: 0px 0;
+  padding: 20px 0 45px 0;  /* 👈 TOP padding bigger */
   width: 100%;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #c8bfbf;
+  border-bottom: 1px solid #c8bfbf;
 }
 
 /* Logo */
@@ -34,7 +35,7 @@
 }
 
 .cook-along-logo {
-  width: 200px;
+  width: 320px;
   height: auto;
   display: block;
 }
@@ -42,6 +43,7 @@
 /* Nav links */
 .nav-links {
   display: flex;
+  margin-right: 50px;
   align-items: center;
   gap: 28px;
 }
@@ -124,7 +126,7 @@
   margin: 0 0 16px 0;
   font-size: 3rem;
   color: #2f2f2f;
-  text-align: left;
+  text-align: center;
 }
 
 .welcome-section p {

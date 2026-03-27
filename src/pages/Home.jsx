@@ -2,7 +2,7 @@
 It should introduce the app, show the logo, and let users search for recipes.
 This page should feel polished and welcoming.*/
 import { useState } from 'react'
-import CookAlongLogo from '../assets/CookAlong.svg'
+import CookAlongLogo from '../assets/CookAlong.png'
 import SearchBar from '../components/SearchBar'
 import featuredDish from '../assets/Carbonara.jpg'
 import './Home.css'
