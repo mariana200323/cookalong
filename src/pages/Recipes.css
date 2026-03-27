@@ -1,0 +1,133 @@
+.recipes-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #f4f4f4;
+    padding: 40px 24px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .recipes-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .recipes-header {
+    margin-bottom: 40px;
+  }
+  
+  .recipes-header h1 {
+    font-size: 3rem;
+    color: #2f2f2f;
+    margin-bottom: 8px;
+  }
+  
+  .recipes-header p {
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  /* Recipe grid */
+  .recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  
+  /* Individual card */
+  .recipe-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .recipe-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  
+  /* Image wrapper needed for overlay positioning */
+  .recipe-card-image-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .recipe-card-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* Hover overlay dropdown */
+  .recipe-hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    animation: fadeIn 0.2s ease;
+  }
+  
+  .recipe-hover-overlay p {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+  
+  .recipe-hover-overlay span {
+    font-weight: 700;
+    color: #e2b24e;
+  }
+  
+  .overlay-ingredients ul {
+    margin: 4px 0 0 16px;
+    padding: 0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  
+  /* Card text below image */
+  .recipe-card h3 {
+    padding: 16px 16px 4px;
+    margin: 0;
+    font-size: 1.2rem;
+    color: #2f2f2f;
+  }
+  
+  .recipe-description {
+    padding: 0 16px 16px;
+    margin: 0;
+    font-size: 0.9rem;
+    color: #777;
+    line-height: 1.5;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @media (max-width: 900px) {
+    .recipes-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .recipes-grid {
+      grid-template-columns: 1fr;
+    }
+  }
