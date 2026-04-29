@@ -1,5 +1,6 @@
 // SearchBar.jsx handles user input for searching recipes.
 // It should update the search term and trigger filtering or navigation to the recipes page.
+import './SearchPopover.css'
 
 function SearchBar({ searchTerm, setSearchTerm, onSearch }) {
     const handleKeyDown = (e) => {

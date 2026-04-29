@@ -1,7 +1,8 @@
 import CookAlongLogo from '../assets/CookAlong.png'
+import SearchPopover from '../components/SearchPopover'
 import './StartHere.css'
 
-function StartHere({ goHome, goToAbout, goToRecipes }) {
+function StartHere({ searchTerm, setSearchTerm, goHome, goToAbout, goToRecipes }) {
   return (
     <main className="start-page">
       <div className="start-content">
@@ -15,6 +16,11 @@ function StartHere({ goHome, goToAbout, goToRecipes }) {
             <a href="#" onClick={(e) => { e.preventDefault(); goToAbout(); }}>About</a>
             <a href="#" onClick={(e) => { e.preventDefault(); goToRecipes(); }}>Recipes</a>
             <a href="#" onClick={(e) => e.preventDefault()} aria-current="page" className="active-link">Start Here</a>
+            <SearchPopover
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              onSubmitSearch={goToRecipes}
+            />
           </nav>
         </header>
 

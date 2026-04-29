@@ -34,11 +34,13 @@ function App() {
       {currentPage === 'recipes' && (
         <Recipes
           searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
           goHome={() => {
             setCurrentPage('home')
             setSelectedRecipe(null)
           }}
           goToAbout={() => setCurrentPage('about')}
+          goToRecipes={() => setCurrentPage('recipes')}
           goToStartHere={() => setCurrentPage('start')}
           goToRecipe={(recipe) => {
             setSelectedRecipe(recipe)
@@ -64,6 +66,8 @@ function App() {
 
       {currentPage === 'about' && (
         <About
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
           goHome={() => {
             setCurrentPage('home')
             setSelectedRecipe(null)
@@ -78,6 +82,8 @@ function App() {
 
       {currentPage === 'start' && (
         <StartHere
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
           goHome={() => {
             setCurrentPage('home')
             setSelectedRecipe(null)

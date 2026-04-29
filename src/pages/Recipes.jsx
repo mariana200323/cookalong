@@ -4,10 +4,11 @@ This page should feel polished and welcoming.*/
 import CookAlongLogo from '../assets/CookAlong.png'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import SearchPopover from '../components/SearchPopover'
 import recipesData from '../Data/recipes'
 import './Recipes.css'
 
-function Recipes({ searchTerm, goHome, goToAbout, goToStartHere, goToRecipe }) {
+function Recipes({ searchTerm, setSearchTerm, goHome, goToAbout, goToRecipes, goToStartHere, goToRecipe }) {
   const [hoveredId, setHoveredId] = useState(null);
 
   useEffect(() => {
@@ -31,6 +32,11 @@ function Recipes({ searchTerm, goHome, goToAbout, goToStartHere, goToRecipe }) {
             <a href="#" onClick={(e) => { e.preventDefault(); goToAbout(); }}>About</a>
             <a href="#">Recipes</a>
             <a href="#" onClick={(e) => { e.preventDefault(); goToStartHere(); }}>Start Here</a>
+            <SearchPopover
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              onSubmitSearch={goToRecipes}
+            />
           </nav>
         </header>
 

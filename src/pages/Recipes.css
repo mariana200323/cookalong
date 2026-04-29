@@ -14,6 +14,48 @@
     margin: 0 auto;
     animation: pageFadeIn 220ms ease;
   }
+
+  .nav-bar {
+    display: flex;
+    height: 200px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 50px;
+    padding: 20px 0 45px 0;
+    width: 100%;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .logo-container {
+    flex-shrink: 0;
+  }
+
+  .cook-along-logo {
+    width: 320px;
+    height: auto;
+    display: block;
+  }
+
+  .nav-links {
+    display: flex;
+    margin-right: 50px;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+
+  .nav-links a:hover {
+    color: var(--primary);
+  }
   
   .recipes-header {
     margin-bottom: 40px;
@@ -145,6 +187,23 @@
   }
   
   @media (max-width: 900px) {
+    .nav-bar {
+      flex-direction: column;
+      gap: 16px;
+      height: auto;
+    }
+
+    .nav-links {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-right: 0;
+    }
+
+    .cook-along-logo {
+      width: 180px;
+    }
+
     .recipes-grid {
       grid-template-columns: repeat(2, 1fr);
     }

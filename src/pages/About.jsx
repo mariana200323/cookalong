@@ -1,7 +1,8 @@
 import CookAlongLogo from '../assets/CookAlong.png'
+import SearchPopover from '../components/SearchPopover'
 import './About.css'
 
-function About({ goHome, goToRecipes, goToStartHere }) {
+function About({ searchTerm, setSearchTerm, goHome, goToRecipes, goToStartHere }) {
   return (
     <main className="about-page">
       <div className="about-content">
@@ -15,6 +16,11 @@ function About({ goHome, goToRecipes, goToStartHere }) {
             <a href="#" onClick={(e) => e.preventDefault()} aria-current="page" className="active-link">About</a>
             <a href="#" onClick={(e) => { e.preventDefault(); goToRecipes(); }}>Recipes</a>
             <a href="#" onClick={(e) => { e.preventDefault(); goToStartHere(); }}>Start Here</a>
+            <SearchPopover
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              onSubmitSearch={goToRecipes}
+            />
           </nav>
         </header>
 
