@@ -1,13 +1,18 @@
 /*Recipes.jsx is the page for displaying available recipes.
  It should show a list of recipes and allow users to browse and select one.
 This page should feel polished and welcoming.*/
-import CookAlongLogo from '../assets/CookAlong.svg'
+import CookAlongLogo from '../assets/CookAlong.png'
 import { useState } from 'react'
+import { useEffect } from 'react'
 import recipesData from '../Data/recipes'
 import './Recipes.css'
 
-function Recipes({ searchTerm, goHome, goToRecipe }) {
+function Recipes({ searchTerm, goHome, goToAbout, goToStartHere, goToRecipe }) {
   const [hoveredId, setHoveredId] = useState(null);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
 
   const filteredRecipes = recipesData.filter(recipe =>
     recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -22,10 +27,10 @@ function Recipes({ searchTerm, goHome, goToRecipe }) {
             <img src={CookAlongLogo} className="cook-along-logo" alt="Cook Along Logo" />
           </div>
           <nav className="nav-links">
-            <a href="#" onClick={goHome}>Home</a>
-            <a href="#">About</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); goHome(); }}>Home</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); goToAbout(); }}>About</a>
             <a href="#">Recipes</a>
-            <a href="#">Start Here</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); goToStartHere(); }}>Start Here</a>
           </nav>
         </header>
 
@@ -36,10 +41,11 @@ function Recipes({ searchTerm, goHome, goToRecipe }) {
 
         <section className="recipes-grid">
           {filteredRecipes.length > 0 ? (
-            filteredRecipes.map((recipe) => (
+            filteredRecipes.map((recipe, idx) => (
               <div
                 key={recipe.id}
                 className="recipe-card"
+                style={{ animationDelay: `${idx * 35}ms` }}
                 onMouseEnter={() => setHoveredId(recipe.id)}
                 onMouseLeave={() => setHoveredId(null)}
                 onClick={() => goToRecipe(recipe)}

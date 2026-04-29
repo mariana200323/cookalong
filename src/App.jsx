@@ -5,11 +5,14 @@ import { useState } from 'react'
 import Home from "./pages/Home"
 import Recipes from "./pages/Recipes"
 import RecipeStep from "./pages/RecipeStep"
+import About from "./pages/About"
+import StartHere from "./pages/StartHere"
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [stepBackTarget, setStepBackTarget] = useState('recipes')
 
   return (
     <>  
@@ -18,6 +21,13 @@ function App() {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           goToRecipes={() => setCurrentPage('recipes')}
+          goToAbout={() => setCurrentPage('about')}
+          goToStartHere={() => setCurrentPage('start')}
+          goToRecipe={(recipe) => {
+            setSelectedRecipe(recipe)
+            setStepBackTarget('home')
+            setCurrentPage('step')
+          }}
         />
       )}
 
@@ -28,8 +38,11 @@ function App() {
             setCurrentPage('home')
             setSelectedRecipe(null)
           }}
+          goToAbout={() => setCurrentPage('about')}
+          goToStartHere={() => setCurrentPage('start')}
           goToRecipe={(recipe) => {
             setSelectedRecipe(recipe)
+            setStepBackTarget('recipes')
             setCurrentPage('step')
           }}
         />
@@ -39,6 +52,38 @@ function App() {
         <RecipeStep
           recipe={selectedRecipe}
           goBack={() => {
+            if (stepBackTarget === 'home') {
+              setCurrentPage('home')
+            } else {
+              setCurrentPage('recipes')
+            }
+            setSelectedRecipe(null)
+          }}
+        />
+      )}
+
+      {currentPage === 'about' && (
+        <About
+          goHome={() => {
+            setCurrentPage('home')
+            setSelectedRecipe(null)
+          }}
+          goToRecipes={() => {
+            setCurrentPage('recipes')
+            setSelectedRecipe(null)
+          }}
+          goToStartHere={() => setCurrentPage('start')}
+        />
+      )}
+
+      {currentPage === 'start' && (
+        <StartHere
+          goHome={() => {
+            setCurrentPage('home')
+            setSelectedRecipe(null)
+          }}
+          goToAbout={() => setCurrentPage('about')}
+          goToRecipes={() => {
             setCurrentPage('recipes')
             setSelectedRecipe(null)
           }}

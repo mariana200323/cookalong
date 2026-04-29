@@ -17,7 +17,12 @@ function SearchBar({ searchTerm, setSearchTerm, onSearch }) {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={handleKeyDown}
             />
-            <button type="button" className="search-button" onClick={onSearch}>🔍</button>
+            <button type="button" className="search-button" onClick={onSearch} aria-label="Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M10 4a6 6 0 104.472 10.03l3.749 3.75a1 1 0 001.414-1.415l-3.75-3.749A6 6 0 0010 4zm0 2a4 4 0 110 8 4 4 0 010-8z" />
+                </svg>
+                <span className="search-button-text">Search</span>
+            </button>
         </div>
     );
 }

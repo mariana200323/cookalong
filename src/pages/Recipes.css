@@ -3,7 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    background-color: #f4f4f4;
+    background: transparent;
     padding: 40px 24px;
     font-family: Arial, sans-serif;
   }
@@ -12,6 +12,7 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    animation: pageFadeIn 220ms ease;
   }
   
   .recipes-header {
@@ -20,13 +21,13 @@
   
   .recipes-header h1 {
     font-size: 3rem;
-    color: #2f2f2f;
+    color: var(--text);
     margin-bottom: 8px;
   }
   
   .recipes-header p {
     font-size: 1.1rem;
-    color: #555;
+    color: var(--muted);
   }
   
   /* Recipe grid */
@@ -38,17 +39,19 @@
   
   /* Individual card */
   .recipe-card {
-    background: white;
-    border-radius: 12px;
+    background: rgba(255,255,255,0.92);
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.10);
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: cardFadeUp 260ms ease both;
   }
   
   .recipe-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
   }
   
   /* Image wrapper needed for overlay positioning */
@@ -89,7 +92,7 @@
   
   .recipe-hover-overlay span {
     font-weight: 700;
-    color: #e2b24e;
+    color: #ffcc66;
   }
   
   .overlay-ingredients ul {
@@ -104,20 +107,41 @@
     padding: 16px 16px 4px;
     margin: 0;
     font-size: 1.2rem;
-    color: #2f2f2f;
+    color: var(--text);
   }
   
   .recipe-description {
     padding: 0 16px 16px;
     margin: 0;
     font-size: 0.9rem;
-    color: #777;
+    color: var(--muted);
     line-height: 1.5;
   }
   
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+  }
+
+  @keyframes pageFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes cardFadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .recipes-content,
+    .recipe-card {
+      animation: none !important;
+    }
+
+    .recipe-card {
+      transition: none;
+    }
   }
   
   @media (max-width: 900px) {
