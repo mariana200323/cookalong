@@ -5,6 +5,9 @@ import './RecipeStep.css'
 function RecipeStep({ recipe, goBack }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [checkedIngredients, setCheckedIngredients] = useState(() => new Set())
+  const [timerTotalSeconds, setTimerTotalSeconds] = useState(0)
+  const [timerSecondsLeft, setTimerSecondsLeft] = useState(0)
+  const [timerRunning, setTimerRunning] = useState(false)
   const [voices, setVoices] = useState([])
   const [selectedVoiceURI, setSelectedVoiceURI] = useState('')
   const [rate, setRate] = useState(0.95)
@@ -13,6 +16,26 @@ function RecipeStep({ recipe, goBack }) {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
+
+  useEffect(() => {
+    if (!timerRunning) return
+    if (timerSecondsLeft <= 0) {
+      setTimerRunning(false)
+      return
+    }
+
+    const id = window.setInterval(() => {
+      setTimerSecondsLeft((s) => Math.max(0, s - 1))
+    }, 1000)
+
+    return () => window.clearInterval(id)
+  }, [timerRunning, timerSecondsLeft])
+
+  useEffect(() => {
+    setTimerRunning(false)
+    setTimerSecondsLeft(0)
+    setTimerTotalSeconds(0)
+  }, [currentStep])
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -28,6 +51,7 @@ function RecipeStep({ recipe, goBack }) {
       }
       if (e.key === "Escape") {
         stopSpeaking()
+        stopTimer()
       }
     };
 
@@ -36,7 +60,7 @@ function RecipeStep({ recipe, goBack }) {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [currentStep, selectedVoiceURI, rate, pitch]);
+  }, [currentStep, selectedVoiceURI, rate, pitch, timerRunning, timerSecondsLeft]);
 
   useEffect(() => {
     const loadVoices = () => {
@@ -68,6 +92,141 @@ function RecipeStep({ recipe, goBack }) {
   }, [selectedVoiceURI])
 
   if (!recipe) return null
+
+  const WORD_NUMBERS = {
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+    ten: 10
+  }
+
+  const parseMaybeNumber = (raw) => {
+    if (!raw) return null
+    const s = String(raw).trim().toLowerCase()
+    if (WORD_NUMBERS[s] != null) return WORD_NUMBERS[s]
+    const n = Number(s)
+    return Number.isFinite(n) ? n : null
+  }
+
+  const toSeconds = (amount, unit) => {
+    const n = Number(amount)
+    if (!Number.isFinite(n)) return null
+    return unit.startsWith('min') ? Math.round(n * 60) : Math.round(n)
+  }
+
+  const extractTimes = (text) => {
+    const t = String(text ?? '')
+    const matches = []
+
+    // 1) Range with digits: "30-60 seconds", "2–3 minutes"
+    const rangeDigits = /\bfor\s+(?:about\s+|approximately\s+)?(\d+(?:\.\d+)?)\s*(?:-|–|to)\s*(\d+(?:\.\d+)?)\s*(seconds?|secs?|minutes?|mins?)\b/gi
+    // 2) Single with digits: "for 1 minute", "for 45 seconds"
+    const singleDigits = /\bfor\s+(?:about\s+|approximately\s+)?(\d+(?:\.\d+)?)\s*(seconds?|secs?|minutes?|mins?)\b/gi
+    // 3) Worded single: "for one minute"
+    const singleWords = /\bfor\s+(?:about\s+|approximately\s+)?(one|two|three|four|five|six|seven|eight|nine|ten)\s*(seconds?|minutes?)\b/gi
+    // 4) "a minute or two" / "a second or two"
+    const minuteOrTwo = /\bfor\s+(?:another\s+)?(?:a|an)\s*(minute|second)\s+or\s+(one|two|three)\b/gi
+
+    const pushMatch = (m, secondsOptions) => {
+      matches.push({
+        start: m.index,
+        end: m.index + m[0].length,
+        text: m[0],
+        secondsOptions
+      })
+    }
+
+    for (const m of t.matchAll(rangeDigits)) {
+      const a = parseMaybeNumber(m[1])
+      const b = parseMaybeNumber(m[2])
+      const unitRaw = (m[3] ?? '').toLowerCase()
+      const unit = unitRaw.startsWith('min') ? 'minutes' : 'seconds'
+      const s1 = toSeconds(a, unit)
+      const s2 = toSeconds(b, unit)
+      if (s1 != null && s2 != null) pushMatch(m, [Math.min(s1, s2), Math.max(s1, s2)])
+    }
+
+    for (const m of t.matchAll(minuteOrTwo)) {
+      const unitRaw = (m[1] ?? '').toLowerCase()
+      const unit = unitRaw.startsWith('min') ? 'minutes' : 'seconds'
+      const upper = parseMaybeNumber(m[2])
+      const s1 = toSeconds(1, unit)
+      const s2 = toSeconds(upper ?? 2, unit)
+      if (s1 != null && s2 != null) pushMatch(m, [Math.min(s1, s2), Math.max(s1, s2)])
+    }
+
+    for (const m of t.matchAll(singleDigits)) {
+      const a = parseMaybeNumber(m[1])
+      const unitRaw = (m[2] ?? '').toLowerCase()
+      const unit = unitRaw.startsWith('min') ? 'minutes' : 'seconds'
+      const s = toSeconds(a, unit)
+      if (s != null) pushMatch(m, [s])
+    }
+
+    for (const m of t.matchAll(singleWords)) {
+      const a = parseMaybeNumber(m[1])
+      const unitRaw = (m[2] ?? '').toLowerCase()
+      const unit = unitRaw.startsWith('min') ? 'minutes' : 'seconds'
+      const s = toSeconds(a, unit)
+      if (s != null) pushMatch(m, [s])
+    }
+
+    // de-dupe overlaps (keep earliest/longest)
+    matches.sort((a, b) => a.start - b.start || b.end - a.end)
+    const filtered = []
+    for (const m of matches) {
+      const overlaps = filtered.some(f => !(m.end <= f.start || m.start >= f.end))
+      if (!overlaps) filtered.push(m)
+    }
+    return filtered
+  }
+
+  const formatTime = (seconds) => {
+    const s = Math.max(0, Math.round(seconds))
+    const mm = Math.floor(s / 60)
+    const ss = s % 60
+    return `${mm}:${String(ss).padStart(2, '0')}`
+  }
+
+  const startTimer = (seconds) => {
+    const s = Math.max(1, Math.round(seconds))
+    setTimerTotalSeconds(s)
+    setTimerSecondsLeft(s)
+    setTimerRunning(true)
+  }
+
+  const stopTimer = () => {
+    setTimerRunning(false)
+  }
+
+  const resetTimer = () => {
+    setTimerRunning(false)
+    setTimerSecondsLeft(timerTotalSeconds)
+  }
+
+  const currentStepText = recipe.steps[currentStep]
+  const timeMatches = useMemo(() => extractTimes(currentStepText), [currentStepText])
+  const firstTimeMatch = timeMatches[0] ?? null
+
+  const renderStepText = () => {
+    if (!firstTimeMatch) return currentStepText
+    const before = currentStepText.slice(0, firstTimeMatch.start)
+    const mid = currentStepText.slice(firstTimeMatch.start, firstTimeMatch.end)
+    const after = currentStepText.slice(firstTimeMatch.end)
+    return (
+      <>
+        {before}
+        <span className="time-highlight">{mid}</span>
+        {after}
+      </>
+    )
+  }
 
   const toggleIngredient = (idx) => {
     setCheckedIngredients((prev) => {
@@ -176,7 +335,62 @@ function RecipeStep({ recipe, goBack }) {
             </div>
 
             <h2>Current Step</h2>
-            <p className="step-text">{recipe.steps[currentStep]}</p>
+            <p className="step-text">{renderStepText()}</p>
+
+            {firstTimeMatch && (
+              <div className="timer-card" aria-label="Timer">
+                <div className="timer-top">
+                  <div className="timer-title">Timer</div>
+                  <div className="timer-value">{formatTime(timerSecondsLeft || firstTimeMatch.secondsOptions[0])}</div>
+                </div>
+
+                <div className="timer-actions">
+                  <div className="timer-buttons">
+                    {firstTimeMatch.secondsOptions.length === 1 ? (
+                      <button
+                        type="button"
+                        className="timer-start"
+                        onClick={() => startTimer(firstTimeMatch.secondsOptions[0])}
+                      >
+                        Start timer
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          className="timer-start"
+                          onClick={() => startTimer(firstTimeMatch.secondsOptions[0])}
+                        >
+                          Start {formatTime(firstTimeMatch.secondsOptions[0])}
+                        </button>
+                        <button
+                          type="button"
+                          className="timer-start secondary"
+                          onClick={() => startTimer(firstTimeMatch.secondsOptions[1])}
+                        >
+                          Start {formatTime(firstTimeMatch.secondsOptions[1])}
+                        </button>
+                      </>
+                    )}
+
+                    {timerTotalSeconds > 0 && (
+                      <>
+                        <button type="button" className="timer-stop" onClick={stopTimer}>
+                          {timerRunning ? 'Stop' : 'Pause'}
+                        </button>
+                        <button type="button" className="timer-stop" onClick={resetTimer}>
+                          Reset
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="timer-hint">
+                    This step includes a time—press <strong>Start timer</strong> to count down.
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="step-buttons">
               <div className="voice-controls">
