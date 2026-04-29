@@ -17,10 +17,50 @@ function RecipeStep({ recipe, goBack }) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
+  const ringTimerDone = () => {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext
+      if (!AudioCtx) return
+
+      const ctx = new AudioCtx()
+      const now = ctx.currentTime
+
+      const master = ctx.createGain()
+      master.gain.setValueAtTime(0.0001, now)
+      master.gain.exponentialRampToValueAtTime(0.25, now + 0.02)
+      master.gain.exponentialRampToValueAtTime(0.0001, now + 1.05)
+      master.connect(ctx.destination)
+
+      // A quick 3-tone chime: pleasant but noticeable
+      const tones = [880, 1175, 988] // A5, D6-ish, B5-ish
+      tones.forEach((freq, i) => {
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.type = 'sine'
+        osc.frequency.setValueAtTime(freq, now)
+        gain.gain.setValueAtTime(0.0001, now)
+        gain.gain.exponentialRampToValueAtTime(0.25, now + 0.02 + i * 0.18)
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18 + i * 0.18)
+        osc.connect(gain)
+        gain.connect(master)
+        osc.start(now + i * 0.18)
+        osc.stop(now + 0.18 + i * 0.18)
+      })
+
+      // Cleanup
+      window.setTimeout(() => {
+        try { ctx.close() } catch { /* ignore */ }
+      }, 1200)
+    } catch {
+      // ignore audio errors (autoplay policy, etc.)
+    }
+  }
+
   useEffect(() => {
     if (!timerRunning) return
     if (timerSecondsLeft <= 0) {
       setTimerRunning(false)
+      ringTimerDone()
       return
     }
 
