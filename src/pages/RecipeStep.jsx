@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useEffect } from "react"
+import { getRecipeQuiz } from '../Data/recipeQuizzes'
 import './RecipeStep.css'
 
 function RecipeStep({ recipe, goBack }) {
@@ -12,10 +13,18 @@ function RecipeStep({ recipe, goBack }) {
   const [selectedVoiceURI, setSelectedVoiceURI] = useState('')
   const [rate, setRate] = useState(0.95)
   const [pitch, setPitch] = useState(1.0)
+  const [quizSelections, setQuizSelections] = useState([])
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
+
+  const quizQuestions = useMemo(() => getRecipeQuiz(recipe?.id), [recipe?.id])
+
+  useEffect(() => {
+    if (recipe?.id == null) return
+    setQuizSelections(getRecipeQuiz(recipe.id).map(() => null))
+  }, [recipe?.id])
 
   const ringTimerDone = () => {
     try {
@@ -132,6 +141,25 @@ function RecipeStep({ recipe, goBack }) {
   }, [selectedVoiceURI])
 
   if (!recipe) return null
+
+  const quizAnsweredCount = quizSelections.filter((s) => s !== null).length
+  const quizScore = quizQuestions.reduce(
+    (acc, q, i) => acc + (quizSelections[i] === q.correctIndex ? 1 : 0),
+    0
+  )
+  const quizComplete = quizQuestions.length > 0 && quizAnsweredCount === quizQuestions.length
+
+  const setQuizChoice = (questionIndex, optionIndex) => {
+    setQuizSelections((prev) => {
+      const next = [...prev]
+      next[questionIndex] = optionIndex
+      return next
+    })
+  }
+
+  const resetQuiz = () => {
+    setQuizSelections(quizQuestions.map(() => null))
+  }
 
   const WORD_NUMBERS = {
     one: 1,
@@ -504,6 +532,69 @@ function RecipeStep({ recipe, goBack }) {
             </div>
           </section>
         </div>
+
+        {quizQuestions.length > 0 && (
+          <section className="recipe-quiz" aria-labelledby="recipe-quiz-heading">
+            <h2 id="recipe-quiz-heading" className="recipe-quiz-title">
+              Quick check: did you retain it?
+            </h2>
+            <p className="recipe-quiz-intro">
+              Five questions about this recipe. Tap an answer to see if you got it right.
+            </p>
+
+            <ol className="recipe-quiz-list">
+              {quizQuestions.map((q, qi) => {
+                const selected = quizSelections[qi]
+                return (
+                  <li key={qi} className="recipe-quiz-item">
+                    <p className="recipe-quiz-question">
+                      <span className="recipe-quiz-num">{qi + 1}.</span> {q.question}
+                    </p>
+                    <div className="recipe-quiz-options" role="group" aria-label={`Question ${qi + 1}`}>
+                      {q.options.map((opt, oi) => {
+                        const isSelected = selected === oi
+                        const isCorrect = oi === q.correctIndex
+                        let optionClass = 'recipe-quiz-option'
+                        if (selected !== null) {
+                          if (isCorrect) optionClass += ' correct'
+                          else if (isSelected && !isCorrect) optionClass += ' incorrect'
+                        } else if (isSelected) {
+                          optionClass += ' selected'
+                        }
+                        return (
+                          <button
+                            key={oi}
+                            type="button"
+                            className={optionClass}
+                            disabled={selected !== null}
+                            onClick={() => setQuizChoice(qi, oi)}
+                          >
+                            {opt}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </li>
+                )
+              })}
+            </ol>
+
+            {quizComplete && (
+              <div className="recipe-quiz-score" role="status">
+                <strong>
+                  Score: {quizScore} / {quizQuestions.length}
+                </strong>
+                {quizScore === quizQuestions.length
+                  ? ' Great job—you nailed this recipe.'
+                  : ' Nice work—review any missed steps above.'}
+              </div>
+            )}
+
+            <button type="button" className="recipe-quiz-reset" onClick={resetQuiz}>
+              Reset quiz
+            </button>
+          </section>
+        )}
       </div>
     </main>
   )
