@@ -1,16 +1,74 @@
-# React + Vite
+# 🍳 CookAlong
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interactive cooking assistant web application designed to guide users through recipes with step-by-step instructions, voice assistance, and an intuitive user experience.
 
-Currently, two official plugins are available:
+## 🚀 Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+CookAlong is a full-stack web application built to make cooking easier for beginners by providing guided recipe workflows, interactive navigation, and hands-free cooking assistance.
 
-## React Compiler
+The project focuses on improving accessibility and user experience by reducing the need to constantly scroll through recipes while cooking.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Developed as part of a software engineering team project following the complete Software Development Life Cycle (SDLC), including requirements gathering, prototyping, user testing, implementation, and deployment.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ✨ Features
+
+- 🔍 Recipe search functionality
+- 🍽️ Recipe categories and filtering
+- 📖 Step-by-step cooking instructions
+- 🔊 Voice-guided recipe assistance
+- ⏮️ Previous/Next step navigation
+- 🔁 Replay instructions
+- ⏱️ Cooking workflow optimization
+- 📱 Responsive web interface
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend**
+- React.js
+- JavaScript
+- HTML5
+- CSS3
+
+**Development Tools**
+- Vite
+- Git/GitHub
+- GitHub Pages
+- AI-assisted development tools
+
+---
+
+## 🧠 Technical Concepts
+
+- Component-based architecture
+- State management
+- User-centered design
+- UI/UX development
+- Accessibility-focused features
+- Agile development practices
+- Usability testing
+- Software Development Life Cycle (SDLC)
+
+---
+
+## 👩‍💻 My Contributions
+
+Team software engineering project.
+
+My responsibilities included:
+
+- Designed and implemented frontend components using React.js
+- Developed recipe search and interactive navigation features
+- Integrated step-by-step workflow logic
+- Implemented voice-guided functionality
+- Debugged application issues and improved usability
+- Participated in user testing and iterative design improvements
+
+---
+
+## 📌 Project Goal
+
+To create an accessible cooking assistant that helps users focus on cooking instead of managing recipes, making the cooking experience easier, faster, and more interactive.
